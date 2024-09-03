@@ -24,11 +24,12 @@ const Login = () => {
                             <Form.Label>Email</Form.Label>
                             <Form.Control
                                 type="email"
-                                placeholder="Enter email..."
+                                placeholder="Enter your email address..."
                                 maxLength={100}
                                 required
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
+                                aria-label={"Email input"}
                             />
                             <Form.Control.Feedback type='invalid'>
                                 Please enter a valid email.
@@ -41,17 +42,18 @@ const Login = () => {
                             </div>
                             <Form.Control
                                 type="password"
-                                placeholder="Enter password..."
+                                placeholder="Enter your password..."
                                 required
                                 maxLength={16}
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
+                                aria-label={"Password input"}
                             />
                             <Form.Control.Feedback type='invalid'>
                                 Please enter your password.
                             </Form.Control.Feedback>
                         </Form.Group>
-                        <Button className={"px-5 py-1 my-3"}>Log In</Button>
+                        <Button type={"submit"} className={"px-5 py-1 my-3"}>Log In</Button>
                     </Form>
                     <p>Don't have an account? <a href="/signup">SignUp</a></p>
                 </Col>
