@@ -1,0 +1,14 @@
+.bg-secondary {
+  background-color: #E9E2E2 !important;
+}
+
+.btn-primary{
+    background-color: #617AFA;
+    border-color: #617AFA;
+}
+
+.btn-primary:hover{
+    background-color: #617AFA;
+    border-color: #617AFA;
+    filter: brightness(85%);
+}

@@ -1,11 +1,13 @@
 import './App.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
+import Login from "./views/Login.jsx"
 
 function App() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<h1>Home</h1>} />
+                <Route path="/" element={<Login/>} />
             </Routes>
       </BrowserRouter>
     )
