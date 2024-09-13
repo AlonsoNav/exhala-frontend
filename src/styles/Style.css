@@ -18,3 +18,36 @@
         min-width: 450px;
     }
 }
+
+.custom-switch .form-check-input {
+    width: 40px;
+    height: 20px;
+    border-radius: 10px;
+    border: 1px solid gray;
+    background-color: transparent;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.custom-switch .form-check-input:checked {
+    background-color: #617AFA;
+}
+
+.custom-switch .form-check-input:focus {
+    box-shadow: 0 0 0 0.2rem rgba(128, 128, 128, 0.25);
+}
+
+.custom-switch .form-check-input:checked:focus {
+    box-shadow: 0 0 0 0.2rem rgba(97, 122, 250, 0.25);
+}
+
+.custom-switch .form-check-input::before {
+    width: 20px;
+    height: 20px;
+    background-color: #fff;
+    border-radius: 50%;
+    transition: transform 0.3s;
+}
+
+.custom-switch .form-check-input:checked::before {
+    transform: translateX(25px);
+}

@@ -1,21 +1,26 @@
+// Bootstrap imports
 import Container from "react-bootstrap/Container"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
 import Image from "react-bootstrap/Image"
 import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
+// Local imports
 import Logo from "../assets/logo.svg"
 import "../styles/Style.css"
+// React imports
 import {useState} from "react";
+import {Link} from "react-router-dom";
 
 const Signup = () => {
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [repeatedPassword, setRepeatedPassword] = useState("")
+    const [type, setType] = useState(false) // False for psychologist, true for patient
 
     return (
-        <Container fluid className={"bg-secondary rounded-4"}>
+        <Container fluid className={"bg-secondary rounded-4 my-2"}>
             <Row>
                 <Col className={"p-4 min-width-450"}>
                     <Image fluid src={Logo} alt={"Exhala's logo"} className={"w-50"}/>
@@ -76,14 +81,25 @@ const Signup = () => {
                                 value={repeatedPassword}
                                 onChange={(e) => setRepeatedPassword(e.target.value)}
                                 aria-label={"Password input"}
+                                isInvalid={password !== repeatedPassword}
                             />
                             <Form.Control.Feedback type='invalid'>
                                 Your password must match.
                             </Form.Control.Feedback>
                         </Form.Group>
+                        <Form.Group className={"mx-1 d-flex align-items-center justify-content-center"}>
+                            <span className={"me-2"}>Psychologist</span>
+                            <Form.Check
+                                type="switch"
+                                className={"custom-switch"}
+                                checked={type}
+                                onChange={() => setType(!type)}
+                            />
+                            <span className={"ms-2"}>Patient</span>
+                        </Form.Group>
                         <Button type={"submit"} className={"px-5 py-1 my-3"}>Create Account</Button>
                     </Form>
-                    <p>Already have an account? <a href="/login">LogIn</a></p>
+                    <p>Already have an account? <Link to="/login">LogIn</Link></p>
                 </Col>
             </Row>
         </Container>

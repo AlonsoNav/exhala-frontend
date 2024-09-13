@@ -1,12 +1,16 @@
+// Bootstrap imports
 import Container from "react-bootstrap/Container"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
 import Image from "react-bootstrap/Image"
 import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
+// Local imports
 import Logo from "../assets/logo.svg"
 import "../styles/Style.css"
+// React imports
 import {useState} from "react";
+import {Link} from "react-router-dom";
 
 const Login = () => {
     const [email, setEmail] = useState("")
@@ -54,7 +58,7 @@ const Login = () => {
                         </Form.Group>
                         <Button type={"submit"} className={"px-5 py-1 my-3"}>Log In</Button>
                     </Form>
-                    <p>Don't have an account? <a href="/signup">SignUp</a></p>
+                    <p>Don't have an account? <Link to="/signup">SignUp</Link></p>
                 </Col>
            </Row>
         </Container>
