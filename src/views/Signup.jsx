@@ -8,17 +8,34 @@ import Logo from "../assets/logo.svg"
 import "../styles/Style.css"
 import {useState} from "react";
 
-const Login = () => {
+const Signup = () => {
+    const [name, setName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [repeatedPassword, setRepeatedPassword] = useState("")
 
     return (
         <Container fluid className={"bg-secondary rounded-4"}>
-           <Row>
+            <Row>
                 <Col className={"p-4 min-width-450"}>
-                    <Image src={Logo} alt={"Exhala's logo"}/>
-                    <h1 className={"mb-3 h4"}>Log in to EXHALA</h1>
+                    <Image fluid src={Logo} alt={"Exhala's logo"} className={"w-50"}/>
+                    <h1 className={"mb-3 h4"}>Sign up to EXHALA</h1>
                     <Form noValidate>
+                        <Form.Group className={"mb-3 mx-1 text-start"} controlId={"formBasicName"}>
+                            <Form.Label>Full Name</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Enter your full name..."
+                                maxLength={100}
+                                required
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                aria-label={"Name input"}
+                            />
+                            <Form.Control.Feedback type='invalid'>
+                                Please enter your full name.
+                            </Form.Control.Feedback>
+                        </Form.Group>
                         <Form.Group className={"mb-3 mx-1 text-start"} controlId="formBasicEmail">
                             <Form.Label>Email</Form.Label>
                             <Form.Control
@@ -35,10 +52,7 @@ const Login = () => {
                             </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group className={"mb-3 mx-1 text-start"} controlId="formBasicPassword">
-                            <div className="d-flex justify-content-between align-items-center">
-                                <Form.Label>Password</Form.Label>
-                                <a href="/forgot-password" className={"text-end"}>Forgot?</a>
-                            </div>
+                            <Form.Label>Password</Form.Label>
                             <Form.Control
                                 type="password"
                                 placeholder="Enter your password..."
@@ -52,13 +66,28 @@ const Login = () => {
                                 Please enter your password.
                             </Form.Control.Feedback>
                         </Form.Group>
-                        <Button type={"submit"} className={"px-5 py-1 my-3"}>Log In</Button>
+                        <Form.Group className={"mb-3 mx-1 text-start"} controlId="formBasicRepeatedPassword">
+                            <Form.Label>Repeat Password</Form.Label>
+                            <Form.Control
+                                type="password"
+                                placeholder="Repeat your password..."
+                                required
+                                maxLength={16}
+                                value={repeatedPassword}
+                                onChange={(e) => setRepeatedPassword(e.target.value)}
+                                aria-label={"Password input"}
+                            />
+                            <Form.Control.Feedback type='invalid'>
+                                Your password must match.
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                        <Button type={"submit"} className={"px-5 py-1 my-3"}>Create Account</Button>
                     </Form>
-                    <p>Don't have an account? <a href="/signup">SignUp</a></p>
+                    <p>Already have an account? <a href="/login">LogIn</a></p>
                 </Col>
-           </Row>
+            </Row>
         </Container>
     )
 }
 
-export default Login
+export default Signup

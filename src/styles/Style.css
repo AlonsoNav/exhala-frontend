@@ -12,3 +12,9 @@
     border-color: #617AFA;
     filter: brightness(85%);
 }
+
+@media (min-width: 768px) {
+    .min-width-450 {
+        min-width: 450px;
+    }
+}
