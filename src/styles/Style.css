@@ -1,5 +1,12 @@
+/* Global Styles */
+
+/* Backgrounds */
 .bg-secondary {
   background-color: #E9E2E2 !important;
+}
+
+.bg-terciary {
+  background-color: white !important;
 }
 
 .btn-primary{
@@ -7,18 +14,21 @@
     border-color: #617AFA;
 }
 
+/* Buttons */
 .btn-primary:hover{
     background-color: #617AFA;
     border-color: #617AFA;
     filter: brightness(85%);
 }
 
+/* Widths */
 @media (min-width: 768px) {
     .min-width-450 {
         min-width: 450px;
     }
 }
 
+/* Switch */
 .custom-switch .form-check-input {
     width: 40px;
     height: 20px;

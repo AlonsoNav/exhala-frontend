@@ -27,7 +27,7 @@ const Signup = () => {
                     <h1 className={"mb-3 h4"}>Sign up to EXHALA</h1>
                     <Form noValidate>
                         <Form.Group className={"mb-3 mx-1 text-start"} controlId={"formBasicName"}>
-                            <Form.Label>Full Name</Form.Label>
+                            <Form.Label column={true}>Full Name</Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Enter your full name..."
@@ -42,7 +42,7 @@ const Signup = () => {
                             </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group className={"mb-3 mx-1 text-start"} controlId="formBasicEmail">
-                            <Form.Label>Email</Form.Label>
+                            <Form.Label column={true}>Email</Form.Label>
                             <Form.Control
                                 type="email"
                                 placeholder="Enter your email address..."
@@ -57,7 +57,7 @@ const Signup = () => {
                             </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group className={"mb-3 mx-1 text-start"} controlId="formBasicPassword">
-                            <Form.Label>Password</Form.Label>
+                            <Form.Label column={true}>Password</Form.Label>
                             <Form.Control
                                 type="password"
                                 placeholder="Enter your password..."
@@ -72,7 +72,7 @@ const Signup = () => {
                             </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group className={"mb-3 mx-1 text-start"} controlId="formBasicRepeatedPassword">
-                            <Form.Label>Repeat Password</Form.Label>
+                            <Form.Label column={true}>Repeat Password</Form.Label>
                             <Form.Control
                                 type="password"
                                 placeholder="Repeat your password..."
