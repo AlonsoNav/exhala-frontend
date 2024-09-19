@@ -8,30 +8,75 @@ import Button from "react-bootstrap/Button"
 // Local imports
 import Logo from "../assets/logo.svg"
 import "../styles/Style.css"
+import ToastComponent from "../components/ToastComponent.jsx";
+import {validateEmail} from "../controllers/InputValidation.jsx";
+import {postRequest} from "../controllers/Db.jsx";
 // React imports
 import {useState} from "react";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 const Signup = () => {
+    const navigate = useNavigate()
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [repeatedPassword, setRepeatedPassword] = useState("")
     const [type, setType] = useState(false) // False for psychologist, true for patient
+    const [toast, setToast] = useState({show: false, message: ""})
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        const form = e.currentTarget;
+        if(form.checkValidity() === false || !validateEmail(email) || password !== repeatedPassword)
+            return
+
+        let payload = {
+            name: name,
+            email: email,
+            password: password,
+            type: type
+        }
+
+        try{
+            const response = await postRequest(payload, "/signup")
+
+            if (!response){
+                setToast({show: true, message: "Server error. Please try again later."})
+            }
+            else{
+                const body = await response.json()
+                if (!response.ok) {
+                    setToast({show: true, message: body.detail})
+                }else{
+                    localStorage.setItem("toastMessage", body.message)
+                    navigate('/')
+                }
+            }
+        }catch (error){
+            console.log(error)
+        }
+    }
 
     return (
         <Container fluid className={"bg-secondary rounded-4 my-2"}>
+            <ToastComponent
+                message={toast.message}
+                show={toast.show}
+                onClose={() => setToast({...toast, show: false})}
+                aria-live={"assertive"}
+            />
             <Row>
                 <Col className={"p-4 min-width-450"}>
                     <Image fluid src={Logo} alt={"Exhala's logo"} className={"w-50"}/>
                     <h1 className={"mb-3 h4"}>Sign up to EXHALA</h1>
-                    <Form noValidate>
+                    <Form noValidate onSubmit={handleSubmit}>
                         <Form.Group className={"mb-3 mx-1 text-start"} controlId={"formBasicName"}>
                             <Form.Label column={true}>Full Name</Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Enter your full name..."
-                                maxLength={100}
+                                maxLength={50}
                                 required
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
@@ -51,6 +96,7 @@ const Signup = () => {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 aria-label={"Email input"}
+                                isInvalid={!validateEmail(email)}
                             />
                             <Form.Control.Feedback type='invalid'>
                                 Please enter a valid email.

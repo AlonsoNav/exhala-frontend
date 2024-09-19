@@ -8,13 +8,12 @@ import Button from "react-bootstrap/Button"
 // Local imports
 import Logo from "../assets/logo.svg"
 import "../styles/Style.css"
-import {postRequest} from "../controllers/Db"
+import {postEncodedRequest} from "../controllers/Db"
 import ToastComponent from "../components/ToastComponent"
 import {validateEmail} from "../controllers/InputValidation.jsx";
 // React imports
 import {useState} from "react";
-import {Link} from "react-router-dom";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 const Login = () => {
     const navigate = useNavigate()
@@ -26,7 +25,7 @@ const Login = () => {
         e.preventDefault()
         e.stopPropagation()
         const form = e.currentTarget;
-        if(form.checkValidity() === false && !validateEmail(email))
+        if(form.checkValidity() === false || !validateEmail(email))
             return
 
         let payload = {
@@ -35,7 +34,7 @@ const Login = () => {
         }
 
         try{
-            const response = await postRequest(payload, "/login")
+            const response = await postEncodedRequest(payload, "/login")
 
             if (!response){
                 setToast({show: true, message: "Server error. Please try again later."})
