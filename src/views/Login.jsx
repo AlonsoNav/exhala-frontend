@@ -12,12 +12,14 @@ import "../styles/Style.css"
 import {postEncodedRequest, postRequest} from "../controllers/Db"
 import ToastComponent from "../components/ToastComponent"
 import {validateEmail} from "../controllers/InputValidation.jsx"
+import {useAuth} from "../contexts/AuthContext"
 // React imports
-import {useState} from "react"
+import {useEffect, useState} from "react"
 import {Link, useNavigate} from "react-router-dom"
 
 const Login = () => {
     const navigate = useNavigate()
+    const {setUser, setIsLoading, setIsAuthenticated} = useAuth()
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [repeatedPassword, setRepeatedPassword] = useState("")
@@ -25,6 +27,14 @@ const Login = () => {
     const [toast, setToast] = useState({show: false, message: "", bg: "danger"})
     const [showForgotPwdModal, setShowForgotPwdModal] = useState(false)
     const [showResetPwdModal, setShowResetPwdModal] = useState(false)
+
+    useEffect(() => {
+        const message = localStorage.getItem("toastMessage")
+        if (message) {
+            setToast({show: true, message: message, bg: "danger"})
+            localStorage.removeItem("toastMessage")
+        }
+    }, []);
 
     const handleForgotPwd = async (e) => {
         e.preventDefault()
@@ -114,6 +124,9 @@ const Login = () => {
                 if (!response.ok) {
                     setToast({show: true, message: body.detail, bg: "danger"})
                 }else{
+                    setUser(body.user)
+                    setIsAuthenticated(true)
+                    setIsLoading(false)
                     localStorage.setItem("toastMessage", body.message)
                     navigate('/')
                 }

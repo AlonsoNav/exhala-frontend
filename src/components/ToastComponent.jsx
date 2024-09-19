@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 import PropTypes from "prop-types";
 
-const ToastComponent = ({ message, show, onClose, bg }) => {
+const ToastComponent = ({ message, show, onClose, bg = "danger"}) => {
     return (
         <ToastContainer className={"position-fixed p-3"} position={"bottom-end"} style={{ zIndex: 1 }}>
             <Toast bg={bg} onClose={onClose} show={show} delay={3000} autohide aria-live={"assertive"} aria-atomic={"true"}>
@@ -22,10 +22,6 @@ ToastComponent.propTypes = {
     show: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
     bg: PropTypes.string
-};
-
-ToastComponent.defaultProps = {
-    bg: "danger"
 };
 
 export default ToastComponent;
