@@ -5,10 +5,6 @@
   background-color: #E9E2E2 !important;
 }
 
-.bg-terciary {
-  background-color: white !important;
-}
-
 .btn-primary{
     background-color: #617AFA;
     border-color: #617AFA;
@@ -60,4 +56,9 @@
 
 .custom-switch .form-check-input:checked::before {
     transform: translateX(25px);
+}
+
+/* Header */
+.margin-header{
+    margin-top: 76px;
 }

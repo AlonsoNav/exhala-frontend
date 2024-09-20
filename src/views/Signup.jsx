@@ -11,12 +11,14 @@ import "../styles/Style.css"
 import ToastComponent from "../components/ToastComponent.jsx";
 import {validateEmail} from "../controllers/InputValidation.jsx";
 import {postRequest} from "../controllers/Db.jsx";
+import {useAuth} from "../contexts/AuthContext"
 // React imports
 import {useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 
 const Signup = () => {
     const navigate = useNavigate()
+    const {setUser, setIsAuthenticated, setIsLoading} = useAuth()
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
@@ -49,6 +51,9 @@ const Signup = () => {
                 if (!response.ok) {
                     setToast({show: true, message: body.detail})
                 }else{
+                    setUser(body.user)
+                    setIsAuthenticated(true)
+                    setIsLoading(false)
                     localStorage.setItem("toastMessage", body.message)
                     navigate('/')
                 }

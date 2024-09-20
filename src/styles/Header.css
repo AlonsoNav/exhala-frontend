@@ -1,0 +1,44 @@
+/* Buttons */
+.clickable-icon {
+     cursor: pointer;
+     transition: color 0.3s;
+ }
+
+.clickable-icon:hover {
+    color: #b3b3b3;
+}
+
+/* Offcanvas */
+.offcanvas-shadow{
+    box-shadow: 3px 0 5px 0 rgba(0, 0, 0, 0.2);
+}
+
+.offcanvas-custom {
+    min-width: 25%;
+}
+
+@media (orientation: landscape) {
+    .offcanvas-custom {
+        max-width: 25%;
+    }
+}
+
+@media (orientation: portrait) {
+    .offcanvas-custom {
+        max-width: 75%;
+    }
+}
+
+/* Nav links */
+.nav-link{
+    color: black;
+}
+
+.nav-link.active{
+    background-color: #EDF0F2;
+    border-radius: 10px;
+}
+
+.nav-link:hover{
+    color: #b3b3b3;
+}
