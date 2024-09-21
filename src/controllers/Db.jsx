@@ -1,10 +1,10 @@
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL
 
 export async function postEncodedRequest(payload, endpoint) {
     // Convert payload to URL encoded
-    const urlEncodedPayload = new URLSearchParams();
+    const urlEncodedPayload = new URLSearchParams()
     for (const [key, value] of Object.entries(payload)) {
-        urlEncodedPayload.append(key, value);
+        urlEncodedPayload.append(key, value)
     }
 
     const requestOptions = {

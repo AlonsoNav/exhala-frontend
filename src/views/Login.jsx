@@ -1,3 +1,5 @@
+// Styles imports
+import "../styles/Style.css"
 // Bootstrap imports
 import Container from "react-bootstrap/Container"
 import Row from "react-bootstrap/Row"
@@ -8,7 +10,6 @@ import Button from "react-bootstrap/Button"
 import Modal from "react-bootstrap/Modal"
 // Local imports
 import Logo from "../assets/logo.svg"
-import "../styles/Style.css"
 import {postEncodedRequest, postRequest} from "../controllers/Db"
 import ToastComponent from "../components/ToastComponent"
 import {validateEmail} from "../controllers/InputValidation.jsx"
@@ -34,12 +35,12 @@ const Login = () => {
             setToast({show: true, message: message, bg: "danger"})
             localStorage.removeItem("toastMessage")
         }
-    }, []);
+    }, [])
 
     const handleForgotPwd = async (e) => {
         e.preventDefault()
         e.stopPropagation()
-        const form = e.currentTarget;
+        const form = e.currentTarget
         if(form.checkValidity() === false || !validateEmail(email))
             return
 
@@ -71,7 +72,7 @@ const Login = () => {
     const handleResetPwd = async (e) => {
         e.preventDefault()
         e.stopPropagation()
-        const form = e.currentTarget;
+        const form = e.currentTarget
         if(form.checkValidity() === false || password !== repeatedPassword)
             return
 
@@ -104,7 +105,7 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         e.stopPropagation()
-        const form = e.currentTarget;
+        const form = e.currentTarget
         if(form.checkValidity() === false || !validateEmail(email))
             return
 
@@ -143,7 +144,6 @@ const Login = () => {
                 show={toast.show}
                 onClose={() => setToast({...toast, show: false})}
                 bg={toast.bg}
-                aria-live={"assertive"}
             />
             <Modal show={showResetPwdModal} onHide={() => setShowResetPwdModal(false)}>
                 <Modal.Header closeButton>
@@ -192,7 +192,7 @@ const Login = () => {
                                         maxLength={16}
                                         value={repeatedPassword}
                                         onChange={(e) => setRepeatedPassword(e.target.value)}
-                                        aria-label={"Password input"}
+                                        aria-label={"Confirm your password input"}
                                         isInvalid={password !== repeatedPassword}
                                     />
                                     <Form.Control.Feedback type='invalid'>

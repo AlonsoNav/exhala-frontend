@@ -1,3 +1,5 @@
+// Styles imports
+import "../styles/Style.css"
 // Bootstrap imports
 import Container from "react-bootstrap/Container"
 import Row from "react-bootstrap/Row"
@@ -7,14 +9,13 @@ import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
 // Local imports
 import Logo from "../assets/logo.svg"
-import "../styles/Style.css"
-import ToastComponent from "../components/ToastComponent.jsx";
-import {validateEmail} from "../controllers/InputValidation.jsx";
-import {postRequest} from "../controllers/Db.jsx";
+import ToastComponent from "../components/ToastComponent.jsx"
+import {validateEmail} from "../controllers/InputValidation.jsx"
+import {postRequest} from "../controllers/Db.jsx"
 import {useAuth} from "../contexts/AuthContext"
 // React imports
-import {useState} from "react";
-import {Link, useNavigate} from "react-router-dom";
+import {useState} from "react"
+import {Link, useNavigate} from "react-router-dom"
 
 const Signup = () => {
     const navigate = useNavigate()
@@ -29,7 +30,7 @@ const Signup = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         e.stopPropagation()
-        const form = e.currentTarget;
+        const form = e.currentTarget
         if(form.checkValidity() === false || !validateEmail(email) || password !== repeatedPassword)
             return
 
@@ -69,7 +70,6 @@ const Signup = () => {
                 message={toast.message}
                 show={toast.show}
                 onClose={() => setToast({...toast, show: false})}
-                aria-live={"assertive"}
             />
             <Row>
                 <Col className={"p-4 min-width-450"}>
@@ -131,7 +131,7 @@ const Signup = () => {
                                 maxLength={16}
                                 value={repeatedPassword}
                                 onChange={(e) => setRepeatedPassword(e.target.value)}
-                                aria-label={"Password input"}
+                                aria-label={"Confirm your password input"}
                                 isInvalid={password !== repeatedPassword}
                             />
                             <Form.Control.Feedback type='invalid'>

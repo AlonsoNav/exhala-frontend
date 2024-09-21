@@ -1,21 +1,23 @@
+// Style imports
+import "../styles/Style.css"
+import "../styles/Home.css"
 // Bootstrap imports
 import Container from "react-bootstrap/Container"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faSearch} from "@fortawesome/free-solid-svg-icons";
-import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
-import Image from "react-bootstrap/Image";
-import Pic from "../assets/example.svg";
+import Form from "react-bootstrap/Form"
+import InputGroup from "react-bootstrap/InputGroup"
+import Image from "react-bootstrap/Image"
+import Pagination from "react-bootstrap/Pagination"
+// Font Awesome imports
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import {faSearch} from "@fortawesome/free-solid-svg-icons"
 // Local imports
-import '../styles/Style.css'
-import '../styles/Home.css'
-import ToastComponent from "../components/ToastComponent.jsx";
-import {filterBySearchTerm} from "../controllers/Filters.jsx";
+import Pic from "../assets/example.svg"
+import ToastComponent from "../components/ToastComponent.jsx"
+import {filterBySearchTerm} from "../controllers/Filters.jsx"
 // React imports
-import {useState, useEffect} from "react";
-import {Pagination} from "react-bootstrap";
+import {useState, useEffect} from "react"
 
 const Home = () => {
     const [toast, setToast] = useState({show: false, message: "", bg:"danger"})
@@ -40,30 +42,35 @@ const Home = () => {
             setToast({show: true, message: message, bg: "info"})
             localStorage.removeItem("toastMessage")
         }
-    }, []);
+    }, [])
 
     // Pagination
-    const itemsPerPage = 4;
-    const maxPageButtons = 5;
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = filteredPsychologists.slice(indexOfFirstItem, indexOfLastItem);
-    const totalPages = Math.ceil(filteredPsychologists.length / itemsPerPage);
+    const itemsPerPage = 4
+    const maxPageButtons = 5
+    const indexOfLastItem = currentPage * itemsPerPage
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage
+    const currentItems = filteredPsychologists.slice(indexOfFirstItem, indexOfLastItem)
+    const totalPages = Math.ceil(filteredPsychologists.length / itemsPerPage)
 
     const renderPaginationItems = () => {
-        const items = [];
-        const startPage = Math.max(1, currentPage - Math.floor(maxPageButtons / 2));
-        const endPage = Math.min(totalPages, startPage + maxPageButtons - 1);
+        const items = []
+        const startPage = Math.max(1, currentPage - Math.floor(maxPageButtons / 2))
+        const endPage = Math.min(totalPages, startPage + maxPageButtons - 1)
 
         for (let number = startPage; number <= endPage; number++) {
             items.push(
-                <Pagination.Item key={number} active={number === currentPage} onClick={() => setCurrentPage(number)}>
+                <Pagination.Item
+                    key={number}
+                    active={number === currentPage}
+                    onClick={() => setCurrentPage(number)}
+                    aria-current={number === currentPage ? "page" : undefined}
+                >
                     {number}
                 </Pagination.Item>
-            );
+            )
         }
 
-        return items;
+        return items
     }
 
     // Filter psychologists by search term
@@ -78,11 +85,16 @@ const Home = () => {
     // Render psychologists
     const psychologistsCards = currentItems.map((psychologist, index) => (
         <Col key={`psychologist_card_${index}`} className="text-start">
-            <Image fluid src={Pic} alt={`Photo of ${psychologist.name}`} className={"rounded-3 mb-3 card-img"}/>
+            <Image
+                fluid
+                src={Pic}
+                alt={`Photo of ${psychologist.name}`}
+                className={"rounded-3 mb-3 card-img"}
+            />
             <p className={"h6"}>{psychologist.name}</p>
             <p>{psychologist.bio}</p>
         </Col>
-    ));
+    ))
 
     return (
         <Container fluid className={"margin-header text-start"}>
@@ -96,7 +108,7 @@ const Home = () => {
                 <Col>
                     <Form>
                         <InputGroup>
-                            <InputGroup.Text className={"searcher"}>
+                            <InputGroup.Text className={"searcher"} aria-label="Search icon">
                                 <FontAwesomeIcon icon={faSearch}/>
                             </InputGroup.Text>
                             <Form.Control
@@ -105,6 +117,7 @@ const Home = () => {
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                                 maxLength="100"
+                                aria-label="Search for a psychologist"
                             />
                         </InputGroup>
                     </Form>
@@ -115,10 +128,18 @@ const Home = () => {
             </Row>
             <Row className={"my-3"}>
                 <Col className={"d-flex justify-content-center"}>
-                    <Pagination>
-                        <Pagination.Prev onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} disabled={currentPage === 1} />
+                    <Pagination aria-label="Psychologists pagination">
+                        <Pagination.Prev
+                            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                            disabled={currentPage === 1}
+                            aria-disabled={currentPage === 1}
+                        />
                         {renderPaginationItems()}
-                        <Pagination.Next onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))} disabled={currentPage === totalPages} />
+                        <Pagination.Next
+                            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                            disabled={currentPage === totalPages}
+                            aria-disabled={currentPage === totalPages}
+                        />
                     </Pagination>
                 </Col>
             </Row>
