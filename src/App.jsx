@@ -30,8 +30,8 @@ ProtectedRoute.propTypes = {
 };
 
 const renderWithHeader = (Component) => (
-    <div className="App d-flex flex-column min-vh-100 min-vw-100">
-        <Header className="App-header sticky-top"/>
+    <div className="d-flex flex-column min-vw-99 min-vh-100">
+        <Header className="sticky-top"/>
         <Component/>
     </div>
 );

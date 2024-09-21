@@ -24,7 +24,7 @@ const Header = () => {
             <Navbar className={"bg-white position-fixed top-0 start-0 w-100 fixed-top shadow-sm"} style={{minHeight:"76px"}}>
                 <Navbar.Brand className={"d-flex align-items-center p-0 w-auto"}>
                     <Image alt={"Exhala's logo"} src={Logo} className={"w-50"} onClick={() => navigate("/")}/>
-                    <FontAwesomeIcon icon={faBars} className={"clickable-icon"} onClick={() => setShow(!show)}/>
+                    <FontAwesomeIcon icon={faBars} className={"clickable-icon"} onClick={()=> setShow(!show)}/>
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
@@ -53,23 +53,23 @@ const Header = () => {
                 <Offcanvas.Body>
                     <Nav className={"d-flex flex-column"}>
                         <Nav.Link onClick={() => navigate("/")}
-                                  className={`py-3 ${location.pathname === "/" ? "active" : ""}`}>
+                                  className={`py-3 nav-link-custom ${location.pathname === "/" ? "active" : ""}`}>
                             <FontAwesomeIcon icon={faHome} className={"me-2"}/> Home
                         </Nav.Link>
                         <Nav.Link onClick={() => navigate("/tasks")}
-                                  className={`py-3 ${location.pathname === "/tasks" ? "active" : ""}`}>
+                                  className={`py-3 nav-link-custom ${location.pathname === "/tasks" ? "active" : ""}`}>
                             <FontAwesomeIcon icon={faCheckCircle} className={"me-2"}/> Tasks
                         </Nav.Link>
                         <Nav.Link onClick={() => navigate("/appointments")}
-                            className={`py-3 ${location.pathname === "/appointments" ? "active" : ""}`}>
+                            className={`py-3 nav-link-custom ${location.pathname === "/appointments" ? "active" : ""}`}>
                             <FontAwesomeIcon icon={faCalendarAlt} className={"me-2"}/> Appointments
                         </Nav.Link>
                         <Nav.Link onClick={() => navigate("/profile")}
-                            className={`py-3 ${location.pathname === "/profile" ? "active" : ""}`}>
+                            className={`py-3 nav-link-custom ${location.pathname === "/profile" ? "active" : ""}`}>
                             <FontAwesomeIcon icon={faUser} className={"me-2"}/> Profile
                         </Nav.Link>
                         <Nav.Link onClick={() => navigate("/settings")}
-                            className={`py-3 ${location.pathname === "/settings" ? "active" : ""}`}>
+                            className={`py-3 nav-link-custom ${location.pathname === "/settings" ? "active" : ""}`}>
                             <FontAwesomeIcon icon={faCog} className={"me-2"}/> Settings
                         </Nav.Link>
                     </Nav>

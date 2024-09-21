@@ -4,3 +4,7 @@
     padding: 0;
     text-align: center;
 }
+
+.min-vw-99{
+    min-width: 99vw;
+}

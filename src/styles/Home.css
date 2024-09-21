@@ -1,0 +1,30 @@
+/* Search input */
+.searcher{
+    background-color: #EDF0F2;
+}
+
+.searcher:focus,
+.searcher:hover{
+    background-color: #EDF0F2;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Pagination */
+.pagination .page-item .page-link {
+    border: none;
+    background-color: transparent;
+    color: #555;
+}
+
+.pagination .page-item.active .page-link {
+    color: #000;
+    font-weight: bold;
+    background-color: transparent;
+    border: none;
+}
+
+.pagination .page-item .page-link:hover,
+.pagination .page-item .page-link:focus,
+.pagination .page-item .page-link:active {
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.5); /* Box-shadow más delgado y de color negro */
+}
