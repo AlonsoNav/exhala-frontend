@@ -9,6 +9,7 @@ import Form from "react-bootstrap/Form"
 import InputGroup from "react-bootstrap/InputGroup"
 import Image from "react-bootstrap/Image"
 import Pagination from "react-bootstrap/Pagination"
+import ToggleButton from "react-bootstrap/ToggleButton"
 // Font Awesome imports
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faSearch} from "@fortawesome/free-solid-svg-icons"
@@ -18,6 +19,7 @@ import ToastComponent from "../components/ToastComponent.jsx"
 import {filterBySearchTerm} from "../controllers/Filters.jsx"
 // React imports
 import {useState, useEffect} from "react"
+import {ButtonGroup} from "react-bootstrap";
 
 const Home = () => {
     const [toast, setToast] = useState({show: false, message: "", bg:"danger"})
@@ -45,7 +47,7 @@ const Home = () => {
     }, [])
 
     // Pagination
-    const itemsPerPage = 4
+    const itemsPerPage = 10
     const maxPageButtons = 5
     const indexOfLastItem = currentPage * itemsPerPage
     const indexOfFirstItem = indexOfLastItem - itemsPerPage
@@ -73,7 +75,44 @@ const Home = () => {
         return items
     }
 
-    // Filter psychologists by search term
+    // Filter psychologists
+    // Render gender filters
+    const [genderValue, setGenderValue] = useState("Any Gender")
+    const genderFilters = ["Any Gender", "Female", "Male"]
+    const genderFilterItems = genderFilters.map((gender, index) => (
+        <ToggleButton
+            key={index}
+            id={`gender-radio-${index}`}
+            type="radio"
+            name="gender"
+            variant={"outline-secondary"}
+            value={gender}
+            checked={gender === genderValue}
+            onChange={() => setGenderValue(gender)}
+            className={"custom-outline-secondary"}
+        >
+            {gender}
+        </ToggleButton>
+    ))
+
+    const [typeValue, setTypeValue] = useState("Any Type")
+    const typeFilters = ["Any Type", "Counselor", "Psychologist", "Therapist"]
+    const typeFilterItems = typeFilters.map((type, index) => (
+        <ToggleButton
+            key={index}
+            id={`type-radio-${index}`}
+            type="radio"
+            name="type"
+            variant={"outline-secondary"}
+            value={type}
+            checked={type === typeValue}
+            onChange={() => setTypeValue(type)}
+            className={"custom-outline-secondary"}
+        >
+            {type}
+        </ToggleButton>
+    ))
+
     useEffect(() => {
         const filteredPsychologists = psychologists.filter(psychologist => {
             return filterBySearchTerm(psychologist.name, searchTerm)
@@ -84,7 +123,7 @@ const Home = () => {
 
     // Render psychologists
     const psychologistsCards = currentItems.map((psychologist, index) => (
-        <Col key={`psychologist_card_${index}`} className="text-start">
+        <Col key={`psychologist-card-${index}`} className="text-start">
             <Image
                 fluid
                 src={Pic}
@@ -104,7 +143,7 @@ const Home = () => {
                 bg={toast.bg}
                 onClose={() => setToast({...toast, show: false})}
             />
-            <Row className={"my-3"}>
+            <Row className={"my-3 px-3"}>
                 <Col>
                     <Form>
                         <InputGroup>
@@ -123,10 +162,24 @@ const Home = () => {
                     </Form>
                 </Col>
             </Row>
-            <Row xs={1} md={4} className={"g-3"}>
+            <Row className={"mb-3 px-3"}>
+                <Col>
+                    <ButtonGroup id={"button-group-genders"}>
+                        {genderFilterItems}
+                    </ButtonGroup>
+                </Col>
+            </Row>
+            <Row className={"mb-3 px-3"}>
+                <Col>
+                    <ButtonGroup id={"button-group-types"} className={"flex-wrap"}>
+                        {typeFilterItems}
+                    </ButtonGroup>
+                </Col>
+            </Row>
+            <Row xs={2} md={5} className={"g-3 px-3"}>
                 {psychologistsCards}
             </Row>
-            <Row className={"my-3"}>
+            <Row className={"my-3 px-3"}>
                 <Col className={"d-flex justify-content-center"}>
                     <Pagination aria-label="Psychologists pagination">
                         <Pagination.Prev

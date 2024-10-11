@@ -28,3 +28,32 @@
 .pagination .page-item .page-link:active {
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.5); /* Box-shadow más delgado y de color negro */
 }
+
+/* Cards */
+/* Home.css */
+.card-img {
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+}
+
+@media (orientation: landscape) {
+    .card-img {
+        width: 17vw;
+    }
+}
+
+@media (orientation: portrait) {
+    .card-img {
+        width: 42vw;
+    }
+}
+
+/* Toggle Buttons */
+.custom-outline-secondary {
+    color: #000000;
+}
+
+.btn-check:checked + .custom-outline-secondary {
+    background-color: #617AFA;
+    color: #ffffff;
+}

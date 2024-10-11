@@ -202,7 +202,7 @@ const Login = () => {
                             </Col>
                         </Row>
                         <div className={"text-end"}>
-                            <button type="submit" className={"btn btn-primary mt-5"}>Send code</button>
+                            <button type="submit" className={"btn btn-primary mt-5"}>Reset password</button>
                         </div>
                     </Form>
                 </Modal.Body>

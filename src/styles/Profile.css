@@ -1,0 +1,42 @@
+/* Form controls */
+.form-control-custom{
+    background-color: #F0F2FA;
+    border: 1px solid #C2C9ED;
+}
+
+.form-control-custom:focus,
+.form-control-custom:hover{
+    background-color: #F0F2FA;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Calendar */
+.calendar-icon-custom::-webkit-calendar-picker-indicator {
+    filter: invert(50%) sepia(100%) saturate(500%) hue-rotate(180deg);
+}
+
+/* Buttons */
+.edit-profile{
+    cursor: pointer;
+}
+
+.edit-profile:hover{
+    text-decoration: underline;
+}
+
+/* Profile photo */
+@media (min-width: 768px) {
+    .profile-photo{
+        width: 13vw;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+    }
+}
+
+@media (max-width: 768px) {
+    .profile-photo{
+        width: 30vw;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+    }
+}

@@ -34,6 +34,10 @@
     color: black;
 }
 
+.nav-link:focus{
+    color: black;
+}
+
 .nav-link.active{
     background-color: #EDF0F2;
     border-radius: 10px;
