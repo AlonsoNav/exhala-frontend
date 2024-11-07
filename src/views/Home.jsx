@@ -10,40 +10,52 @@ import InputGroup from "react-bootstrap/InputGroup"
 import Image from "react-bootstrap/Image"
 import Pagination from "react-bootstrap/Pagination"
 import ToggleButton from "react-bootstrap/ToggleButton"
+import ButtonGroup from "react-bootstrap/ButtonGroup";
 // Font Awesome imports
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faSearch} from "@fortawesome/free-solid-svg-icons"
 // Local imports
-import Pic from "../assets/example.svg"
+import DefaultPhoto from "../assets/profile.svg"
 import ToastComponent from "../components/ToastComponent.jsx"
-import {filterBySearchTerm} from "../controllers/Filters.jsx"
+import {filterBySearchTerm, filterByGender, filterByType} from "../controllers/Filters.jsx"
+import {getRequest} from "../controllers/Db.jsx";
 // React imports
 import {useState, useEffect} from "react"
-import {ButtonGroup} from "react-bootstrap";
 
 const Home = () => {
     const [toast, setToast] = useState({show: false, message: "", bg:"danger"})
-    const [psychologists, setPsychologists] = useState([
-        {name: "Dr. Alonso Navarro", bio: "PdD in Psychology"},
-        {name: "Dr. Alonso Navarro", bio: "PdD in Psychology"},
-        {name: "Dr. Alonso Navarro", bio: "PdD in Psychology"},
-        {name: "Dr. Alonso Navarro", bio: "PdD in Psychology"},
-        {name: "Dr. Maria Perez", bio: "PdD in Psychology"},
-        {name: "Dr. Maria Perez", bio: "PdD in Psychology"},
-        {name: "Dr. Maria Perez", bio: "PdD in Psychology"},
-        {name: "Dr. Maria Perez", bio: "PdD in Psychology"},
-        {name: "Dr. Carlos Perez", bio: "PdD in Psychology"}
-    ])
+    const [psychologists, setPsychologists] = useState([])
     const [filteredPsychologists, setFilteredPsychologists] = useState([])
     const [searchTerm, setSearchTerm] = useState("")
     const [currentPage, setCurrentPage] = useState(1)
+    const [genderValue, setGenderValue] = useState("Any Gender")
+    const genderFilters = ["Any Gender", "Female", "Male"]
+    const [typeValue, setTypeValue] = useState("Any Type")
+    const typeFilters = ["Any Type", "Counselor", "Psychologist", "Therapist"]
 
     useEffect(() => {
+        const fetchPsychologists = () => {
+            getRequest("/psychologists")
+                .then((response) => {
+                    if (!response.ok)
+                        return response.json().then((error) => Promise.reject(error.detail))
+                    return response.json()
+                })
+                .then((body) => {
+                    setPsychologists(body)
+                })
+                .catch((error) => {
+                    console.error("Error:", error)
+                })
+        }
+
         const message = localStorage.getItem("toastMessage")
-        if(message){
+        if(message) {
             setToast({show: true, message: message, bg: "info"})
             localStorage.removeItem("toastMessage")
         }
+
+        fetchPsychologists()
     }, [])
 
     // Pagination
@@ -77,8 +89,6 @@ const Home = () => {
 
     // Filter psychologists
     // Render gender filters
-    const [genderValue, setGenderValue] = useState("Any Gender")
-    const genderFilters = ["Any Gender", "Female", "Male"]
     const genderFilterItems = genderFilters.map((gender, index) => (
         <ToggleButton
             key={index}
@@ -95,8 +105,6 @@ const Home = () => {
         </ToggleButton>
     ))
 
-    const [typeValue, setTypeValue] = useState("Any Type")
-    const typeFilters = ["Any Type", "Counselor", "Psychologist", "Therapist"]
     const typeFilterItems = typeFilters.map((type, index) => (
         <ToggleButton
             key={index}
@@ -115,18 +123,20 @@ const Home = () => {
 
     useEffect(() => {
         const filteredPsychologists = psychologists.filter(psychologist => {
-            return filterBySearchTerm(psychologist.name, searchTerm)
+            return filterBySearchTerm(psychologist.name, searchTerm) &&
+                (typeValue === "Any Type" || filterByType(psychologist.type, typeValue)) &&
+                (genderValue === "Any Gender" || filterByGender(psychologist.gender, genderValue))
         })
 
         setFilteredPsychologists(filteredPsychologists)
-    }, [psychologists, searchTerm])
+    }, [psychologists, searchTerm, typeValue, genderValue])
 
     // Render psychologists
     const psychologistsCards = currentItems.map((psychologist, index) => (
         <Col key={`psychologist-card-${index}`} className="text-start">
             <Image
                 fluid
-                src={Pic}
+                src={psychologist.photo ? psychologist.photo : DefaultPhoto}
                 alt={`Photo of ${psychologist.name}`}
                 className={"rounded-3 mb-3 card-img"}
             />

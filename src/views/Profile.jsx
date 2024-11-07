@@ -241,7 +241,7 @@ const Profile = () => {
                                     <p className={"m-0 text-muted"}>Bye bye.</p>
                                 </Col>
                                 <Col className={"col-auto mt-3 mt-md-0 align-self-sm-center align-self-start"}>
-                                    <Button className={"rounded-4"} style={{ minWidth: "210px" }}>Logout</Button>
+                                    <Button className={"rounded-4"} variant={"danger"} style={{ minWidth: "210px" }}>Logout</Button>
                                 </Col>
                             </Row>
                         </Col>

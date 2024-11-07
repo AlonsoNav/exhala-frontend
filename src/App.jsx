@@ -9,6 +9,7 @@ import Signup from "./views/Signup.jsx"
 import Home from "./views/Home.jsx"
 import Profile from "./views/Profile.jsx"
 import Header from "./components/Header.jsx"
+import Settings from "./views/Settings.jsx";
 import {AuthProvider, useAuth} from "./contexts/AuthContext.jsx"
 import PropTypes from "prop-types"
 
@@ -47,6 +48,7 @@ function App() {
                     <Route path={"/signup"} element={<Signup/>} />
                     <Route path={"/"} element={<ProtectedRoute>{renderWithHeader(Home)}</ProtectedRoute>} />
                     <Route path={"/profile"} element={<ProtectedRoute>{renderWithHeader(Profile)}</ProtectedRoute>} />
+                    <Route path={"/settings"} element={<ProtectedRoute>{renderWithHeader(Settings)}</ProtectedRoute>} />
                 </Routes>
             </BrowserRouter>
         </AuthProvider>
