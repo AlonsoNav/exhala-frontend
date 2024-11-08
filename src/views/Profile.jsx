@@ -12,12 +12,16 @@ import Button from "react-bootstrap/Button"
 import {useAuth} from "../contexts/AuthContext.jsx"
 import ProfileIcon from "../assets/profile.svg"
 import {validateEmail} from "../controllers/InputValidation.jsx"
+import ModalComponent from "../components/ModalComponent.jsx"
 // React imports
 import {useState} from "react"
+import {useNavigate} from "react-router-dom"
+import ToastComponent from "../components/ToastComponent.jsx";
 
 const Profile = () => {
-    const {user} = useAuth()
-    const isPsychologist = true
+    const navigate = useNavigate()
+    const [toast, setToast] = useState({show: false, message: "", bg: "danger"})
+    const {user, logout} = useAuth()
     const [name, setName] = useState(user.name || "")
     const [email, setEmail] = useState(user.email || "")
     const [birthDate, setBirthDate] = useState(user.birthDate || "")
@@ -27,6 +31,7 @@ const Profile = () => {
     const [gender, setGender] = useState("Female")
     const [type, setType] = useState("Counselor")
     const [isReadonly, setIsReadonly] = useState(true)
+    const [showLogoutModal, setShowLogoutModal] = useState(false)
 
     // Date
     const today = new Date()
@@ -46,6 +51,19 @@ const Profile = () => {
         setIsReadonly(!isReadonly)
     }
 
+    // Logout
+    const handleLogout = () => {
+        logout()
+        if (localStorage.getItem("logoutResult")) {
+            localStorage.removeItem("logoutResult")
+            localStorage.setItem("toastMessage", "Logout successful.")
+            localStorage.setItem("toastBg", "info")
+            navigate("/login")
+        } else {
+            setToast({show: true, message: "Error logging out.", bg: "danger"})
+        }
+    }
+
     // Gender options
     const genders = ["Male", "Female"]
     const genderOptions = genders.map((gender, index) => (
@@ -60,6 +78,21 @@ const Profile = () => {
 
     return(
         <Container fluid className={"margin-header text-start"}>
+            <ToastComponent
+                message={toast.message}
+                show={toast.show}
+                onClose={() => setToast({...toast, show: false})}
+                bg={toast.bg}
+            />
+            <ModalComponent
+                show={showLogoutModal}
+                onClose={() => setShowLogoutModal(false)}
+                title={"Confirm Logout"}
+                message={"Are you sure you want to logout?"}
+                confirmButtonText={"Logout"}
+                confirmButtonVariant={"danger"}
+                onConfirm={() => handleLogout()}
+            />
             <Row className={"my-3 px-3"}>
                 <Col>
                     <Row className={"align-items-center"}>
@@ -190,7 +223,7 @@ const Profile = () => {
                             </Form.Group>
                         </Col>
                     </Row>
-                    {isPsychologist ? (
+                    {!user.type ? (
                         <Row xs={1} md={2}>
                             <Col>
                                 <Form.Group className={"mx-1 text-start"} controlId="formBasicGenderPicker">
@@ -241,7 +274,11 @@ const Profile = () => {
                                     <p className={"m-0 text-muted"}>Bye bye.</p>
                                 </Col>
                                 <Col className={"col-auto mt-3 mt-md-0 align-self-sm-center align-self-start"}>
-                                    <Button className={"rounded-4"} variant={"danger"} style={{ minWidth: "210px" }}>Logout</Button>
+                                    <Button
+                                        className={"rounded-4"}
+                                        variant={"danger"}
+                                        style={{ minWidth: "210px" }}
+                                        onClick={() => setShowLogoutModal(true)}>Logout</Button>
                                 </Col>
                             </Row>
                         </Col>

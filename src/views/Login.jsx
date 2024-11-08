@@ -31,8 +31,9 @@ const Login = () => {
 
     useEffect(() => {
         const message = localStorage.getItem("toastMessage")
+        const bg = localStorage.getItem("toastBg") || "danger"
         if (message) {
-            setToast({show: true, message: message, bg: "danger"})
+            setToast({show: true, message: message, bg: bg})
             localStorage.removeItem("toastMessage")
         }
     }, [])
