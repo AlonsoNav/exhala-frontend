@@ -17,27 +17,27 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null)
 
     useEffect(() => {
-        if(!isAuthenticated){
-            (async () => {
-                try {
-                    const response = await getRequest("/validate-cookie")
-
+        if (!isAuthenticated) {
+            getRequest("/validate-cookie")
+                .then((response) => {
                     if (response.ok) {
-                        const userData = await response.json()
-                        setUser(userData)
-                        setIsAuthenticated(true)
+                        return response.json().then((userData) => {
+                            setUser(userData)
+                            setIsAuthenticated(true)
+                        })
                     } else {
                         setIsAuthenticated(false)
                         setUser(null)
                     }
-                } catch (error) {
+                })
+                .catch((error) => {
                     console.error(error)
                     setIsAuthenticated(false)
                     setUser(null)
-                } finally {
+                })
+                .finally(() => {
                     setIsLoading(false)
-                }
-            })()
+                })
         } else {
             setIsLoading(false)
         }

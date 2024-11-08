@@ -37,104 +37,107 @@ const Login = () => {
         }
     }, [])
 
-    const handleForgotPwd = async (e) => {
+
+    const handleForgotPwd = (e) => {
         e.preventDefault()
         e.stopPropagation()
         const form = e.currentTarget
-        if(form.checkValidity() === false || !validateEmail(email))
-            return
 
-        let payload = {
+        if (form.checkValidity() === false || !validateEmail(email)) return
+
+        const payload = {
             email: email
         }
 
-        try{
-            const response = await postRequest(payload, "/forgot-password")
-
-            if (!response){
-                setToast({show: true, message: "Server error. Please try again later.", bg: "danger"})
-            }
-            else{
-                const body = await response.json()
-                if (!response.ok)
-                    setToast({show: true, message: body.detail, bg: "danger"})
-                else {
-                    setToast({show: true, message: body.message, bg: "info"})
-                    setShowForgotPwdModal(false)
-                    setShowResetPwdModal(true)
+        postRequest(payload, "/forgot-password")
+            .then((response) => {
+                if (!response) {
+                    setToast({ show: true, message: "Server error. Please try again later.", bg: "danger" })
+                    return Promise.reject("No response from server")
                 }
-            }
-        }catch (error){
-            console.log(error)
-        }
+                return response.json().then((body) => {
+                    if (!response.ok) {
+                        setToast({ show: true, message: body.detail, bg: "danger" })
+                        return Promise.reject(body.detail)
+                    } else {
+                        setToast({ show: true, message: body.message, bg: "info" })
+                        setShowForgotPwdModal(false)
+                        setShowResetPwdModal(true)
+                    }
+                })
+            })
+            .catch((error) => {
+                console.error("Error:", error)
+            })
     }
 
-    const handleResetPwd = async (e) => {
+    const handleResetPwd = (e) => {
         e.preventDefault()
         e.stopPropagation()
         const form = e.currentTarget
-        if(form.checkValidity() === false || password !== repeatedPassword)
-            return
 
-        let payload = {
+        if (form.checkValidity() === false || password !== repeatedPassword) return
+
+        const payload = {
             email: email,
             code: code,
             password: password
         }
 
-        try{
-            const response = await postRequest(payload, "/reset-password")
-
-            if (!response){
-                setToast({show: true, message: "Server error. Please try again later.", bg: "danger"})
-            }
-            else{
-                const body = await response.json()
-                if (!response.ok)
-                    setToast({show: true, message: body.detail, bg: "danger"})
-                else {
-                    setToast({show: true, message: body.message, bg: "info"})
-                    setShowResetPwdModal(false)
+        postRequest(payload, "/reset-password")
+            .then((response) => {
+                if (!response) {
+                    setToast({ show: true, message: "Server error. Please try again later.", bg: "danger" })
+                    return Promise.reject("No response from server")
                 }
-            }
-        }catch (error){
-            console.log(error)
-        }
+                return response.json().then((body) => {
+                    if (!response.ok) {
+                        setToast({ show: true, message: body.detail, bg: "danger" })
+                        return Promise.reject(body.detail)
+                    } else {
+                        setToast({ show: true, message: body.message, bg: "info" })
+                        setShowResetPwdModal(false)
+                    }
+                })
+            })
+            .catch((error) => {
+                console.error("Error:", error)
+            })
     }
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault()
         e.stopPropagation()
         const form = e.currentTarget
-        if(form.checkValidity() === false || !validateEmail(email))
-            return
+        if (form.checkValidity() === false || !validateEmail(email)) return
 
-        let payload = {
+        const payload = {
             username: email,
             password: password
         }
 
-        try{
-            const response = await postEncodedRequest(payload, "/login")
-
-            if (!response){
-                setToast({show: true, message: "Server error. Please try again later.", bg: "danger"})
-            }
-            else{
-                const body = await response.json()
-                if (!response.ok) {
-                    setToast({show: true, message: body.detail, bg: "danger"})
-                }else{
-                    setUser(body.user)
-                    setIsAuthenticated(true)
-                    setIsLoading(false)
-                    localStorage.setItem("toastMessage", body.message)
-                    navigate('/')
+        postEncodedRequest(payload, "/login")
+            .then(response => {
+                if (!response) {
+                    setToast({ show: true, message: "Server error. Please try again later.", bg: "danger" })
+                    return Promise.reject("No response from server")
                 }
-            }
-        }catch (error){
-            console.log(error)
-        }
+                return response.json().then(body => {
+                    if (!response.ok) {
+                        setToast({ show: true, message: body.detail, bg: "danger" })
+                        return Promise.reject(body.detail)
+                    } else {
+                        setUser(body.user)
+                        setIsAuthenticated(true)
+                        setIsLoading(false)
+                        localStorage.setItem("toastMessage", body.message)
+                        navigate('/')
+                    }
+                })
+            })
+            .catch(error => {
+                console.error("Error:", error)
+            })
     }
 
     return (

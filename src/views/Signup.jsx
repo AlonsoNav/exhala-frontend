@@ -27,7 +27,7 @@ const Signup = () => {
     const [type, setType] = useState(false) // False for psychologist, true for patient
     const [toast, setToast] = useState({show: false, message: ""})
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault()
         e.stopPropagation()
         const form = e.currentTarget
@@ -41,27 +41,28 @@ const Signup = () => {
             type: type
         }
 
-        try{
-            const response = await postRequest(payload, "/signup")
-
-            if (!response){
-                setToast({show: true, message: "Server error. Please try again later."})
+        postRequest(payload, "/signup")
+        .then((response) => {
+            if (!response) {
+                setToast({ show: true, message: "Server error. Please try again later." })
+                return Promise.reject("No response from server")
             }
-            else{
-                const body = await response.json()
+            return response.json().then((body) => {
                 if (!response.ok) {
-                    setToast({show: true, message: body.detail})
-                }else{
+                    setToast({ show: true, message: body.detail })
+                    return Promise.reject(body.detail)
+                } else {
                     setUser(body.user)
                     setIsAuthenticated(true)
                     setIsLoading(false)
                     localStorage.setItem("toastMessage", body.message)
                     navigate('/')
                 }
-            }
-        }catch (error){
-            console.log(error)
-        }
+            })
+        })
+        .catch((error) => {
+            console.error("Error:", error)
+        })
     }
 
     return (
