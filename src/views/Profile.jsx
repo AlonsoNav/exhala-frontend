@@ -14,11 +14,11 @@ import {useAuth} from "../contexts/AuthContext.jsx"
 import ProfileIcon from "../assets/profile.svg"
 import {validateEmail} from "../controllers/InputValidation.jsx"
 import ModalComponent from "../components/ModalComponent.jsx"
+import ToastComponent from "../components/ToastComponent.jsx";
+import {putRequest} from "../controllers/Db.jsx";
 // React imports
 import {useState} from "react"
 import {useNavigate} from "react-router-dom"
-import ToastComponent from "../components/ToastComponent.jsx";
-import {postRequest} from "../controllers/Db.jsx";
 
 const Profile = () => {
     const navigate = useNavigate()
@@ -101,7 +101,7 @@ const Profile = () => {
             newPassword: newPassword
         }
 
-        postRequest(payload, "/change-password")
+        putRequest(payload, "/change-password")
             .then((response) => {
                 if (!response) {
                     setToast({ show: true, message: "Server error. Please try again later.", bg: "danger" })
