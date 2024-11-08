@@ -48,11 +48,9 @@ export const AuthProvider = ({ children }) => {
         postRequest({}, "/logout")
             .then((response) => {
                 if (response.ok) {
-                    response.json().then((data) => {
-                        setUser(null)
-                        setIsAuthenticated(false)
-                        localStorage.setItem("logoutResult", "s")
-                    })
+                    setUser(null)
+                    setIsAuthenticated(false)
+                    localStorage.setItem("logoutResult", "s")
                 }
             })
             .catch((error) => {
