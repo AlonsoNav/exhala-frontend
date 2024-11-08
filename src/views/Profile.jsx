@@ -12,10 +12,10 @@ import Modal from "react-bootstrap/Modal"
 // Local imports
 import {useAuth} from "../contexts/AuthContext.jsx"
 import ProfileIcon from "../assets/profile.svg"
-import {validateEmail} from "../controllers/InputValidation.jsx"
+import {validateEmail, validatePhone} from "../controllers/InputValidation.jsx"
 import ModalComponent from "../components/ModalComponent.jsx"
-import ToastComponent from "../components/ToastComponent.jsx";
-import {putRequest} from "../controllers/Db.jsx";
+import ToastComponent from "../components/ToastComponent.jsx"
+import {putRequest} from "../controllers/Db.jsx"
 // React imports
 import {useState} from "react"
 import {useNavigate} from "react-router-dom"
@@ -23,39 +23,98 @@ import {useNavigate} from "react-router-dom"
 const Profile = () => {
     const navigate = useNavigate()
     const [toast, setToast] = useState({show: false, message: "", bg: "danger"})
-    const {user, logout} = useAuth()
+    // User data
+    const {user, setUser, logout} = useAuth()
     const [name, setName] = useState(user.name || "")
     const [email, setEmail] = useState(user.email || "")
-    const [birthDate, setBirthDate] = useState(user.birthDate || "")
+    const [birthdate, setBirthdate] = useState(user.birthdate ? new Date(user.birthdate).toISOString().split('T')[0] : "")
     const [phone, setPhone] = useState(user.phone || "")
     const [address, setAddress] = useState(user.address || "")
     const [bio, setBio] = useState(user.bio || "")
-    const [gender, setGender] = useState("Female")
-    const [type, setType] = useState("Counselor")
+    const [gender, setGender] = useState(user.gender || "Female")
+    const [type, setType] = useState(user.psychologistType || "Counselor")
+    // Password
     const [oldPassword, setOldPassword] = useState("")
     const [newPassword, setNewPassword] = useState("")
     const [repeatedNewPassword, setRepeatedNewPassword] = useState("")
     const [isReadonly, setIsReadonly] = useState(true)
+    // Modals
     const [showLogoutModal, setShowLogoutModal] = useState(false)
     const [showChangePwdModal, setShowChangePwdModal] = useState(false)
     const [showChangePwdConfirmModal, setShowChangePwdConfirmModal] = useState(false)
+    const [showEditModal, setShowEditModal] = useState(false)
 
     // Date
     const today = new Date()
     const maxDate = new Date(today.getFullYear() - 12, today.getMonth(), today.getDate()).toISOString().split("T")[0]
     const minDate = "1924-01-01"
 
+    // Reset data
+    const resetData = () => {
+        setName(user.name)
+        setEmail(user.email)
+        setBirthdate(user.birthdate ? new Date(user.birthdate).toISOString().split('T')[0] : "")
+        setPhone(user.phone || "")
+        setAddress(user.address || "")
+        setBio(user.bio || "")
+        setGender(user.gender || "Female")
+        setType(user.psychologistType || "Counselor")
+    }
+
     // Edit
     const handleEditButton = () => {
         if(!isReadonly){
-            setName(user.name)
-            setEmail(user.email)
-            setBirthDate(user.birthDate || "")
-            setPhone(user.phone)
-            setAddress(user.address)
-            setBio(user.bio)
+           resetData()
         }
         setIsReadonly(!isReadonly)
+    }
+
+    const handleEditSubmit = (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        const form = e.currentTarget
+        if(form.checkValidity() === false || !validateEmail(email) || (phone.length !== 0 && !validatePhone(phone)))
+            return
+        setShowEditModal(true)
+    }
+
+    const handleEditConfirm = () => {
+        setShowEditModal(false)
+        setIsReadonly(true)
+
+        const payload = {
+            name: name,
+            email: email,
+            birthdate: birthdate ? new Date(birthdate).toISOString().split('T')[0] : null,
+            phone: phone,
+            address: address,
+            bio: bio,
+            gender: gender,
+            psychologistType: type
+        }
+
+        console.log(birthdate)
+
+        putRequest(payload, "/update-user")
+            .then((response) => {
+                if (!response) {
+                    setToast({ show: true, message: "Server error. Please try again later.", bg: "danger" })
+                    return Promise.reject("No response from server")
+                }
+                return response.json().then((body) => {
+                    if (!response.ok) {
+                        setToast({ show: true, message: body.detail, bg: "danger" })
+                        return Promise.reject(body.detail)
+                    } else {
+                        setToast({ show: true, message: "User updated successfully.", bg: "info" })
+                        setUser(body)
+                        resetData()
+                    }
+                })
+            })
+            .catch((error) => {
+                console.error("Error:", error)
+            })
     }
 
     // Logout
@@ -154,6 +213,15 @@ const Profile = () => {
                 confirmButtonVariant={"primary"}
                 onConfirm={handlePasswordConfirmedChange}
             />
+            <ModalComponent
+                show={showEditModal}
+                onClose={() => setShowEditModal(false)}
+                title={"Confirm Changes"}
+                message={"Are you sure you want to save your changes?"}
+                confirmButtonText={"Save changes"}
+                confirmButtonVariant={"primary"}
+                onConfirm={handleEditConfirm}
+            />
             <Modal show={showChangePwdModal} onHide={() => setShowChangePwdModal(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>Change Password</Modal.Title>
@@ -236,6 +304,7 @@ const Profile = () => {
                     </Row>
                 </Col>
             </Row>
+            <Form noValidate onSubmit={handleEditSubmit}>
             <Row xs={1} md={2} className={"mb-3 px-3"}>
                 <Col>
                     <Row>
@@ -317,8 +386,8 @@ const Profile = () => {
                                     className={"form-control-custom calendar-icon-custom"}
                                     type="date"
                                     placeholder="Enter your birthdate..."
-                                    value={birthDate}
-                                    onChange={(e) => setBirthDate(e.target.value)}
+                                    value={birthdate}
+                                    onChange={(e) => setBirthdate(e.target.value)}
                                     aria-label={"Date of birth input"}
                                     min={minDate}
                                     max={maxDate}
@@ -341,6 +410,7 @@ const Profile = () => {
                                     onChange={(e) => setPhone(e.target.value)}
                                     aria-label={"Phone number input"}
                                     readOnly={isReadonly}
+                                    isInvalid={phone.length !== 0 && !validatePhone(phone)}
                                 />
                                 <Form.Control.Feedback type='invalid'>
                                     Please enter a valid phone number.
@@ -416,7 +486,7 @@ const Profile = () => {
                             {isReadonly ? null : (
                                 <Row className={"mx-1"}>
                                     <Col>
-                                        <Button className={"rounded-4 w-100"}>Save changes</Button>
+                                        <Button className={"rounded-4 w-100"} type={"submit"}>Save changes</Button>
                                     </Col>
                                 </Row>
                             )}
@@ -424,6 +494,7 @@ const Profile = () => {
                     </Row>
                 </Col>
             </Row>
+            </Form>
         </Container>
     )
 }
