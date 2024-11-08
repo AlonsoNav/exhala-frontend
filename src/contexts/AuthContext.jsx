@@ -23,6 +23,7 @@ export const AuthProvider = ({ children }) => {
                 .then((response) => {
                     if (response.ok) {
                         return response.json().then((userData) => {
+                            console.log("User data:", userData)
                             setUser(userData)
                             setIsAuthenticated(true)
                         })

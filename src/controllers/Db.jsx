@@ -38,6 +38,21 @@ export async function postRequest(payload, endpoint) {
     }
 }
 
+export async function postFileRequest(formData, endpoint) {
+    const requestOptions = {
+        method: 'POST',
+        mode: "cors",
+        body: formData,
+        credentials: 'include'
+    }
+
+    try {
+        return await fetch(`${API_URL}${endpoint}`, requestOptions)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 export async function putRequest(payload, endpoint) {
     const requestOptions = {
         method: 'PUT',

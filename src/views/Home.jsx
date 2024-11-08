@@ -18,7 +18,8 @@ import {faSearch} from "@fortawesome/free-solid-svg-icons"
 import DefaultPhoto from "../assets/profile.svg"
 import ToastComponent from "../components/ToastComponent.jsx"
 import {filterBySearchTerm, filterByGender, filterByType} from "../controllers/Filters.jsx"
-import {getRequest} from "../controllers/Db.jsx";
+import {getRequest} from "../controllers/Db.jsx"
+import {getImageType} from "../controllers/Utils.jsx"
 // React imports
 import {useState, useEffect} from "react"
 
@@ -136,7 +137,7 @@ const Home = () => {
         <Col key={`psychologist-card-${index}`} className="text-start">
             <Image
                 fluid
-                src={psychologist.photo ? psychologist.photo : DefaultPhoto}
+                src={psychologist.profile_image ? `data:image/${getImageType(psychologist.profile_image)};base64,${psychologist.profile_image}` : DefaultPhoto}
                 alt={`Photo of ${psychologist.name}`}
                 className={"rounded-3 mb-3 card-img"}
             />

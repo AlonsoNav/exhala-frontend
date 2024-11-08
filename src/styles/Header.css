@@ -46,3 +46,8 @@
 .nav-link:hover{
     color: #b3b3b3;
 }
+
+.profile-photo{
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+}

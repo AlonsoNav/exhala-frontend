@@ -15,10 +15,11 @@ import ProfileIcon from "../assets/profile.svg"
 import {validateEmail, validatePhone} from "../controllers/InputValidation.jsx"
 import ModalComponent from "../components/ModalComponent.jsx"
 import ToastComponent from "../components/ToastComponent.jsx"
-import {putRequest} from "../controllers/Db.jsx"
+import {postFileRequest, putRequest} from "../controllers/Db.jsx"
 // React imports
-import {useState} from "react"
+import {useEffect, useState} from "react"
 import {useNavigate} from "react-router-dom"
+import {getImageType} from "../controllers/Utils.jsx"
 
 const Profile = () => {
     const navigate = useNavigate()
@@ -33,6 +34,9 @@ const Profile = () => {
     const [bio, setBio] = useState(user.bio || "")
     const [gender, setGender] = useState(user.gender || "Female")
     const [type, setType] = useState(user.psychologistType || "Counselor")
+    // Photo
+    const [isPhotoLoading, setIsPhotoLoading] = useState(false)
+    const [imageFile, setImageFile] = useState(null)
     // Password
     const [oldPassword, setOldPassword] = useState("")
     const [newPassword, setNewPassword] = useState("")
@@ -43,6 +47,7 @@ const Profile = () => {
     const [showChangePwdModal, setShowChangePwdModal] = useState(false)
     const [showChangePwdConfirmModal, setShowChangePwdConfirmModal] = useState(false)
     const [showEditModal, setShowEditModal] = useState(false)
+    const [showPhotoModal, setShowPhotoModal] = useState(false)
 
     // Date
     const today = new Date()
@@ -184,6 +189,53 @@ const Profile = () => {
             })
     }
 
+    // Photo
+    const handlePhotoSubmit = (e) => {
+        e.preventDefault()
+
+        if (!imageFile)
+            return
+
+        const reader = new FileReader()
+        reader.readAsDataURL(imageFile)
+        reader.onloadend = () => {
+            const base64Image = reader.result.split(',')[1]
+
+            const formData = new FormData()
+            formData.append('file', imageFile)
+
+            setIsPhotoLoading(true)
+
+            postFileRequest(formData, '/upload-image')
+                .then((response) => {
+                    if (!response) {
+                        setToast({ show: true, message: 'Server error. Please try again later.', bg: 'danger' })
+                        return Promise.reject('No response from server')
+                    }
+                    return response.json().then((data) => {
+                        if (!response.ok) {
+                            setToast({ show: true, message: data.detail || 'Error uploading image', bg: 'danger' })
+                            return Promise.reject(data.detail || 'Error uploading image')
+                        } else {
+                            setToast({ show: true, message: 'Image uploaded successfully!', bg: 'info' })
+                            setUser((prevUser) => ({
+                                ...prevUser,
+                                profile_image: base64Image
+                            }))
+                            setShowPhotoModal(false)
+                        }
+                    })
+                })
+                .catch((error) => {
+                    console.error(error)
+                    setToast({ show: true, message: 'An error occurred while uploading the image.', bg: 'danger' })
+                })
+                .finally(() => {
+                    setIsPhotoLoading(false)
+                })
+        }
+    }
+
     return(
         <Container fluid className={"margin-header text-start"}>
             <ToastComponent
@@ -286,12 +338,42 @@ const Profile = () => {
                     </Form>
                 </Modal.Body>
             </Modal>
+            <Modal show={showPhotoModal} onHide={() => setShowPhotoModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Change Photo</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form noValidate onSubmit={handlePhotoSubmit}>
+                        <Row>
+                            <Col>
+                                <Form.Group className={"mb-3 mx-1 text-start"} controlId="formBasicPhoto">
+                                    <Form.Label column={true}>Photo</Form.Label>
+                                    <Form.Control
+                                        type="file"
+                                        required
+                                        accept="image/*"
+                                        aria-label={"Photo input"}
+                                        onChange={(e) => setImageFile(e.target.files[0])}
+                                    />
+                                    <Form.Control.Feedback type='invalid'>
+                                        Please select a photo.
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <div className={"text-end"}>
+                            <button className={"btn btn-primary mt-5"} type={"submit"} disabled={isPhotoLoading}>
+                                {isPhotoLoading ? "Uploading" : "Upload photo"}</button>
+                        </div>
+                    </Form>
+                </Modal.Body>
+            </Modal>
             <Row className={"my-3 px-3"}>
                 <Col>
                     <Row className={"align-items-center"}>
                         <Col xs="auto">
                             <Image
-                                src={user.image || ProfileIcon}
+                                src={user.profile_image ? `data:image/${getImageType(user.profile_image)};base64,${user.profile_image}` : ProfileIcon}
                                 roundedCircle
                                 alt={"Profile image"}
                                 className={"profile-photo"}
@@ -299,7 +381,8 @@ const Profile = () => {
                         </Col>
                         <Col>
                             <h2 className={"mb-0 h3"}>{user.name || ""}</h2>
-                            <p className={"text-primary edit-profile"} onClick={handleEditButton}>Edit profile</p>
+                            <p className={"text-primary edit-profile mb-0"} onClick={handleEditButton}>Edit profile</p>
+                            <p className={"text-primary edit-profile"} onClick={() => setShowPhotoModal(true)}>Change photo</p>
                         </Col>
                     </Row>
                 </Col>

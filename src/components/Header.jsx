@@ -5,6 +5,7 @@ import "../styles/Style.css"
 import {useAuth} from "../contexts/AuthContext.jsx"
 import Logo from "../assets/logo.svg"
 import ProfileIcon from "../assets/profile.svg"
+import {getImageType} from "../controllers/Utils.jsx"
 // React imports
 import {useState} from "react"
 import {useNavigate, useLocation} from "react-router-dom"
@@ -34,9 +35,10 @@ const Header = () => {
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="ms-auto align-items-center me-2">
                         <Image
-                            src={user.image || ProfileIcon}
+                            src={user.profile_image ? `data:image/${getImageType(user.profile_image)};base64,${user.profile_image}` : ProfileIcon}
                             roundedCircle
                             alt={"Profile image"}
+                            className={"profile-photo"}
                             style={{maxWidth: "45px", maxHeight: "45px"}}
                         />
                         <div className={"d-flex flex-column text-start d-none d-md-flex"}>
