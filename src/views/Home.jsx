@@ -124,7 +124,7 @@ const Home = () => {
     useEffect(() => {
         const filteredPsychologists = psychologists.filter(psychologist => {
             return filterBySearchTerm(psychologist.name, searchTerm) &&
-                (typeValue === "Any Type" || filterByType(psychologist.type, typeValue)) &&
+                (typeValue === "Any Type" || filterByType(psychologist.psychologistType, typeValue)) &&
                 (genderValue === "Any Gender" || filterByGender(psychologist.gender, genderValue))
         })
 
