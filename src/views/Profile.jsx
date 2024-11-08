@@ -8,6 +8,7 @@ import Col from "react-bootstrap/Col"
 import Form from "react-bootstrap/Form"
 import Image from "react-bootstrap/Image"
 import Button from "react-bootstrap/Button"
+import Modal from "react-bootstrap/Modal"
 // Local imports
 import {useAuth} from "../contexts/AuthContext.jsx"
 import ProfileIcon from "../assets/profile.svg"
@@ -17,6 +18,7 @@ import ModalComponent from "../components/ModalComponent.jsx"
 import {useState} from "react"
 import {useNavigate} from "react-router-dom"
 import ToastComponent from "../components/ToastComponent.jsx";
+import {postRequest} from "../controllers/Db.jsx";
 
 const Profile = () => {
     const navigate = useNavigate()
@@ -30,8 +32,13 @@ const Profile = () => {
     const [bio, setBio] = useState(user.bio || "")
     const [gender, setGender] = useState("Female")
     const [type, setType] = useState("Counselor")
+    const [oldPassword, setOldPassword] = useState("")
+    const [newPassword, setNewPassword] = useState("")
+    const [repeatedNewPassword, setRepeatedNewPassword] = useState("")
     const [isReadonly, setIsReadonly] = useState(true)
     const [showLogoutModal, setShowLogoutModal] = useState(false)
+    const [showChangePwdModal, setShowChangePwdModal] = useState(false)
+    const [showChangePwdConfirmModal, setShowChangePwdConfirmModal] = useState(false)
 
     // Date
     const today = new Date()
@@ -76,6 +83,48 @@ const Profile = () => {
       <option key={`type-${index}`} value = {type}>{type}</option>
     ))
 
+    // Handle password change
+    const handlePasswordChangeSubmit = (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        const form = e.currentTarget
+        if(form.checkValidity() === false || newPassword !== repeatedNewPassword)
+            return
+        setShowChangePwdConfirmModal(true)
+        setShowChangePwdModal(false)
+    }
+
+    const handlePasswordConfirmedChange = () => {
+        setShowChangePwdConfirmModal(false)
+        let payload = {
+            oldPassword: oldPassword,
+            newPassword: newPassword
+        }
+
+        postRequest(payload, "/change-password")
+            .then((response) => {
+                if (!response) {
+                    setToast({ show: true, message: "Server error. Please try again later.", bg: "danger" })
+                    return Promise.reject("No response from server")
+                }
+                return response.json().then((body) => {
+                    if (!response.ok) {
+                        setToast({ show: true, message: body.detail, bg: "danger" })
+                        return Promise.reject(body.detail)
+                    } else {
+                        setToast({ show: true, message: body.message, bg: "info" })
+                        setShowChangePwdModal(false)
+                        setOldPassword("")
+                        setNewPassword("")
+                        setRepeatedNewPassword("")
+                    }
+                })
+            })
+            .catch((error) => {
+                console.error("Error:", error)
+            })
+    }
+
     return(
         <Container fluid className={"margin-header text-start"}>
             <ToastComponent
@@ -93,6 +142,82 @@ const Profile = () => {
                 confirmButtonVariant={"danger"}
                 onConfirm={() => handleLogout()}
             />
+            <ModalComponent
+                show={showChangePwdConfirmModal}
+                onClose={() => {
+                    setShowChangePwdConfirmModal(false)
+                    setShowChangePwdModal(true)
+                }}
+                title={"Confirm Password Change"}
+                message={"Are you sure you want to change your password?"}
+                confirmButtonText={"Change password"}
+                confirmButtonVariant={"primary"}
+                onConfirm={handlePasswordConfirmedChange}
+            />
+            <Modal show={showChangePwdModal} onHide={() => setShowChangePwdModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Change Password</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form noValidate onSubmit={handlePasswordChangeSubmit}>
+                        <Row>
+                            <Col>
+                                <Form.Group className={"mb-3 mx-1 text-start"} controlId="formBasicPassword">
+                                    <Form.Label column={true}>Old Password</Form.Label>
+                                    <Form.Control
+                                        type="password"
+                                        placeholder="Enter your old password..."
+                                        required
+                                        maxLength={16}
+                                        value={oldPassword}
+                                        onChange={(e) => setOldPassword(e.target.value)}
+                                        aria-label={"Old password input"}
+                                        isInvalid={oldPassword === ""}
+                                    />
+                                    <Form.Control.Feedback type='invalid'>
+                                        Please enter your old password.
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                                <Form.Group className={"mb-3 mx-1 text-start"} controlId="formBasicPassword">
+                                    <Form.Label column={true}>New Password</Form.Label>
+                                    <Form.Control
+                                        type="password"
+                                        placeholder="Enter your new password..."
+                                        required
+                                        maxLength={16}
+                                        value={newPassword}
+                                        onChange={(e) => setNewPassword(e.target.value)}
+                                        aria-label={"New password input"}
+                                        isInvalid={newPassword === ""}
+                                    />
+                                    <Form.Control.Feedback type='invalid'>
+                                        Please enter your new password.
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                                <Form.Group className={"mb-3 mx-1 text-start"} controlId="formBasicRepeatedPassword">
+                                    <Form.Label column={true}>Repeat New Password</Form.Label>
+                                    <Form.Control
+                                        type="password"
+                                        placeholder="Repeat your new password..."
+                                        required
+                                        maxLength={16}
+                                        value={repeatedNewPassword}
+                                        onChange={(e) => setRepeatedNewPassword(e.target.value)}
+                                        aria-label={"Confirm your new password input"}
+                                        isInvalid={newPassword !== repeatedNewPassword}
+                                    />
+                                    <Form.Control.Feedback type='invalid'>
+                                        Your password must match.
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <div className={"text-end"}>
+                            <button type="submit" className={"btn btn-primary mt-5"}>Change password</button>
+                        </div>
+                    </Form>
+                </Modal.Body>
+            </Modal>
             <Row className={"my-3 px-3"}>
                 <Col>
                     <Row className={"align-items-center"}>
@@ -261,7 +386,10 @@ const Profile = () => {
                                     <p className={"m-0 text-muted"}>Manage your preferences.</p>
                                 </Col>
                                 <Col className={"col-auto mt-3 mt-md-0 align-self-sm-center align-self-start"}>
-                                    <Button className={"rounded-4"} style={{ minWidth: "210px" }}>Change your password</Button>
+                                    <Button
+                                        className={"rounded-4"}
+                                        style={{ minWidth: "210px" }}
+                                        onClick={() => setShowChangePwdModal(true)}>Change your password</Button>
                                 </Col>
                             </Row>
                         </Col>
