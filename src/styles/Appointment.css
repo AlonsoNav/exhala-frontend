@@ -1,0 +1,36 @@
+.btn-group .btn {
+    background-color: transparent; /* Transparent background */
+    border-color: #000000;
+    color: #000000;
+    border-right: 0; /* Remove the right border from the first button */
+    gap: 12px;
+  }
+
+  .custom-btn.active {
+    background-color: #E8DEF8; /* Light purple background */
+    color: #000000; /* Darker purple text color for active button */
+    border-color: #E8DEF8; /* Match the background */
+  }
+  
+  
+  .btn-group .btn:last-child {
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }
+  .btn-group .btn:first-child {
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }
+
+  .container {
+    margin-top: 5rem; /* Espacio debajo del header */
+
+  }
+  
+  h1 {
+    margin-top: 1.5rem; /* Espacio arriba del título */
+    margin-bottom: 1.5rem; /* Espacio debajo del título */
+    font: jaka, sans-serif; /* Fuente del título */
+    font-weight: 400; /* Grosor de la fuente */
+    size: 25px;
+  }

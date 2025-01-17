@@ -140,6 +140,15 @@ const Login = () => {
                 console.error("Error:", error)
             })
     }
+    const handleDevLogin = () => {
+        if (process.env.NODE_ENV !== 'production') {
+            setUser({ id: "12345", name: "Dev User", email: "dev@example.com", role: "admin" });
+            setIsAuthenticated(true);
+            setIsLoading(false);
+            localStorage.setItem("toastMessage", "Logged in as Dev User");
+            navigate('/');
+        }
+    };
 
     return (
         <Container fluid className={"bg-secondary rounded-4 my-2"}>
@@ -287,6 +296,14 @@ const Login = () => {
                     <p>Don&apos;t have an account? <Link to="/signup">SignUp</Link></p>
                 </Col>
            </Row>
+           <Button
+    className="btn btn-secondary mt-3"
+    onClick={() => {
+        handleDevLogin();
+    }}
+>
+    Skip Login (Dev)
+</Button>
         </Container>
     )
 }

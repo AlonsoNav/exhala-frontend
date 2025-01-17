@@ -11,6 +11,7 @@ import Profile from "./views/Profile.jsx"
 import Header from "./components/Header.jsx"
 import Settings from "./views/Settings.jsx";
 import {AuthProvider, useAuth} from "./contexts/AuthContext.jsx"
+import AppointmentsScreen from "./views/Appointment.jsx"
 import PropTypes from "prop-types"
 
 const ProtectedRoute = ({ children }) => {
@@ -49,6 +50,7 @@ function App() {
                     <Route path={"/"} element={<ProtectedRoute>{renderWithHeader(Home)}</ProtectedRoute>} />
                     <Route path={"/profile"} element={<ProtectedRoute>{renderWithHeader(Profile)}</ProtectedRoute>} />
                     <Route path={"/settings"} element={<ProtectedRoute>{renderWithHeader(Settings)}</ProtectedRoute>} />
+                    <Route path={"/appointments"} element={<ProtectedRoute>{renderWithHeader(AppointmentsScreen)}</ProtectedRoute>} />
                 </Routes>
             </BrowserRouter>
         </AuthProvider>
