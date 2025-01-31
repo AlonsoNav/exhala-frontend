@@ -146,7 +146,7 @@ const Login = () => {
             setIsAuthenticated(true);
             setIsLoading(false);
             localStorage.setItem("toastMessage", "Logged in as Dev User");
-            navigate('/');
+            navigate('/book-appointment');
         }
     };
 

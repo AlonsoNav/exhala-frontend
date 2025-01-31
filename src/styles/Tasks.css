@@ -1,0 +1,19 @@
+h1 {
+    margin-top: 1.5rem; /* Espacio arriba del título */
+    margin-bottom: 1.5rem; /* Espacio debajo del título */
+    font-weight: 700; /* Grosor de la fuente */
+    size: 32px;
+    line-height: 40px;
+    justify-content: space-between;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  header {
+    margin-top: 5rem; /* Espacio arriba del título */
+}
+h2{
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    size: 18px;
+    line-height: 24px;
+    font-weight: 700;
+}
