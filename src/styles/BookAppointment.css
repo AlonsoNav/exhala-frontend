@@ -1,0 +1,89 @@
+.react-calendar {
+  width: 100%;
+  max-width: 650px;
+  font-size: 1.2em; /* Adjust the font size for better readability */
+  background: transparent;
+  border: none;
+}
+
+.react-calendar__tile {
+  border-radius: 50%;
+  text-align: center;
+  padding: 12px;
+  font-size: 1.2em;
+  color: black !important; /* Set default text color to black */
+}
+
+.react-calendar__tile--active {
+  background: #617AFA !important; /* Make the selected day white */
+  color: white !important;      /* Set selected day text to black */
+  border-radius: 50%;
+}
+
+.react-calendar__tile--now {
+  background: #f0f0f0;
+  border-radius: 50%;
+}
+
+.react-calendar__tile:hover {
+  background: #ddd;
+  border-radius: 50%;
+}
+
+.react-calendar__navigation button {
+  color: #000000;
+  font-size: 1.2em;
+}
+
+.react-calendar__month-view__weekdays {
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.react-calendar__tile--disabled {
+  visibility: hidden; /* Hide out-of-month dates */
+}
+
+.container {
+  margin-top: 5rem; /* Espacio debajo del header */
+  padding-top: 100px;
+}
+
+
+
+.col-md-4,
+.col-md-8 {
+  padding: 0;
+  margin: 0;
+}
+
+/* Align text to the left across all sections */
+.text-left p, .text-left h2, .text-left ul, .text-left h5 {
+  text-align: left;
+}
+
+.text-left {
+  margin-left: 15px;
+}
+
+/* Make sure the appointment buttons are aligned properly */
+.btn-outline-none {
+  background-color: transparent !important;
+  color: black !important;
+  border: 1px solid black !important; /* Optional: if you want to add a border */
+}
+
+.btn-outline-none:hover {
+  background-color: transparent !important;
+  color: black !important;
+  border: 1px solid black !important; /* Optional: if you want the border to remain on hover */
+}
+
+.align-left {
+  text-align: left;
+}
+
+/* For the reviews, list and user description to start from the left */
+ul {
+  padding-left: 20px;
+}

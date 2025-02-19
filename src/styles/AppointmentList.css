@@ -1,0 +1,41 @@
+.transparent-background {
+    background-color: transparent !important;
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex; /* Use flexbox to align items horizontally */
+    align-items: flex-start; /* Align items to the start (top) */
+    border-bottom: 1px solid #CAC4D0; /* Add a border to separate appointments */
+  }
+  
+  .transparent-background img {
+    width: 100%; /* Fixed image size */
+    height: 100%; /* Fixed image size */
+    object-fit: cover; /* Ensure the image maintains its aspect ratio */
+    border-radius: 10px; /* Round the corners of the image */
+  }
+  
+  .appointment-details {
+    padding-left: 10px; /* Add space between the image and the text */
+    display: flex; /* Ensure that text elements are aligned left */
+    flex-direction: column; /* Stack text elements vertically */
+    align-items: flex-start; /* Align text to the left */
+    flex-grow: 1; /* Allow the text container to take the remaining space */
+  }
+  
+  .appointment-title {
+    font-size: 1.25rem; /* Make the title larger */
+    font-weight: bold;
+    margin-bottom: 5px; /* Space between title and category */
+  }
+  
+  .appointment-category {
+    display: block;
+    font-size: 0.9rem; /* Adjust category font size */
+    margin-bottom: 5px; /* Space between category and description */
+  }
+  
+  .appointment-description {
+    font-size: 1rem;
+    margin-top: 10px;
+  }
+  

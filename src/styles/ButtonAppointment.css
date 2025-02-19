@@ -1,0 +1,22 @@
+/* Default button styles */
+.custom-btn {
+    background-color: transparent; /* Transparent background */
+    border: 1px solid #000000; /* Light purple border */
+    color: #000000; /* Text color for the button */
+    transition: background-color 0.3s, color 0.3s; /* Smooth transition */
+    gap: 12px;
+    margin-bottom: 10%;
+  }
+  
+  /* Active button styles */
+  .custom-btn.active {
+    background-color: #e8def8; /* Light purple background */
+    color: #000000; /* Darker purple text color for active button */
+    border-color: #000000; /* Match the background */
+  }
+  
+  /* Hover styles */
+  .custom-btn:hover {
+    background-color: rgba(232, 222, 248, 0.4); /* Subtle hover effect */
+    color: #4a148c; /* Darker purple text color on hover */
+  }
