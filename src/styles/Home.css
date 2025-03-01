@@ -57,3 +57,8 @@
     background-color: #617AFA;
     color: #ffffff;
 }
+
+/* Cursors */
+.cursor-pointer {
+    cursor: pointer;
+}

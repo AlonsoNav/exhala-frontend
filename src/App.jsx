@@ -17,6 +17,7 @@ import SessionDetailsPage from "./views/SessionDetails.jsx"
 import PropTypes from "prop-types"
 import BookAppointment from "./views/BookAppointment.jsx"
 import SessionDetailsAdmin from "./views/SessionDetailsAdmin.jsx"
+import Psychologist from "./views/Psychologist.jsx"
 
 const ProtectedRoute = ({ children }) => {
     const { isAuthenticated, isLoading } = useAuth()
@@ -59,6 +60,7 @@ function App() {
                     <Route path={"/tasks"} element={<ProtectedRoute>{renderWithHeader(TasksScreen)}</ProtectedRoute>} />
                     <Route path={"/session-details"} element={<ProtectedRoute>{renderWithHeader(SessionDetailsPage)}</ProtectedRoute>} />
                     <Route path={"/session-details-admin"} element={<ProtectedRoute>{renderWithHeader(SessionDetailsAdmin)}</ProtectedRoute>} />
+                    <Route path={"/psychologist/:id"} element={<ProtectedRoute>{renderWithHeader(Psychologist)}</ProtectedRoute>} />
                 </Routes>
             </BrowserRouter>
         </AuthProvider>

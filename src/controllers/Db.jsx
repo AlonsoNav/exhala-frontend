@@ -73,7 +73,6 @@ export async function getRequest(endpoint) {
     const requestOptions = {
         method: 'GET',
         mode: "cors",
-        headers: {'Content-Type': 'application/json'},
         credentials: 'include'
     }
 

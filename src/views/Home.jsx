@@ -22,6 +22,7 @@ import {getRequest} from "../controllers/Db.jsx"
 import {getImageType} from "../controllers/Utils.jsx"
 // React imports
 import {useState, useEffect} from "react"
+import {useNavigate} from "react-router-dom"
 
 const Home = () => {
     const [toast, setToast] = useState({show: false, message: "", bg:"danger"})
@@ -33,6 +34,7 @@ const Home = () => {
     const genderFilters = ["Any Gender", "Female", "Male"]
     const [typeValue, setTypeValue] = useState("Any Type")
     const typeFilters = ["Any Type", "Counselor", "Psychologist", "Therapist"]
+    const navigate = useNavigate()
 
     useEffect(() => {
         const fetchPsychologists = () => {
@@ -134,7 +136,7 @@ const Home = () => {
 
     // Render psychologists
     const psychologistsCards = currentItems.map((psychologist, index) => (
-        <Col key={`psychologist-card-${index}`} className="text-start">
+        <Col key={`psychologist-card-${index}`} className="text-start cursor-pointer" onClick={() => navigate(`/psychologist/${psychologist.id}`)}>
             <Image
                 fluid
                 src={psychologist.profile_image ? `data:image/${getImageType(psychologist.profile_image)};base64,${psychologist.profile_image}` : DefaultPhoto}
@@ -142,9 +144,9 @@ const Home = () => {
                 className={"rounded-3 mb-3 card-img"}
             />
             <p className={"h6"}>{psychologist.name}</p>
-            <p>{psychologist.bio}</p>
         </Col>
     ))
+
 
     return (
         <Container fluid className={"margin-header text-start"}>
